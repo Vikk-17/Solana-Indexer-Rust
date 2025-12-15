@@ -1,10 +1,12 @@
 use solana_client::nonblocking::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcBlockConfig;
 use solana_commitment_config::CommitmentConfig;
-use solana_transaction_status_client_types::{EncodedTransaction, TransactionDetails, UiTransactionEncoding};
+use solana_transaction_status_client_types::{
+    EncodedTransaction, TransactionDetails, UiTransactionEncoding,
+};
 
 #[tokio::main]
-async fn main() -> anyhow::Result<()>{
+async fn main() -> anyhow::Result<()> {
     let client = RpcClient::new_with_commitment(
         String::from("https://api.mainnet-beta.solana.com"),
         CommitmentConfig::confirmed(),
@@ -33,9 +35,9 @@ async fn main() -> anyhow::Result<()>{
             all_signatures.extend(ui_tx.signatures);
         }
     }
-    println!("Found {} signatures", all_signatures.len());
-    for (i, sig) in all_signatures.iter().enumerate() {
-        println!("{}: {}", i + 1, sig);
-    }
+    // println!("Found {} signatures", all_signatures.len());
+    // for (i, sig) in all_signatures.iter().enumerate() {
+    //     println!("{}: {}", i + 1, sig);
+    // }
     Ok(())
 }
