@@ -15,6 +15,9 @@ async fn main() -> anyhow::Result<()> {
     // let slots: u64 = client.get_slot_with_commitment(CommitmentConfig::confirmed()).await?;
     // println!("Slots: {:#?}", slots);
     let slot_number = 377261141;
+
+    // === Fetch block at specific slot ===
+    // Use Full to get complete transaction data with account balances
     let config = RpcBlockConfig {
         encoding: Some(UiTransactionEncoding::Json),
         transaction_details: Some(TransactionDetails::Full),
@@ -22,14 +25,13 @@ async fn main() -> anyhow::Result<()> {
         commitment: Some(CommitmentConfig::confirmed()),
         max_supported_transaction_version: Some(0),
     };
-    let block = client.get_block_with_config(slot_number, config).await?;
-    // println!("{:#?}", block);
-    // let data = block.transactions.unwrap();
-    //
-    // for (i, _txns) in data.iter().enumerate(){
-    //     println!("{:#?}", data[i].transaction);
-    // }
+
+    let block = client
+        .get_block_with_config(slot_number, config)
+        .await?;
+
     let mut all_signatures: Vec<String> = Vec::new();
+    // Iterate and add all signatures to the vector
     for txn in block.transactions.unwrap_or_default() {
         if let EncodedTransaction::Json(ui_tx) = txn.transaction {
             all_signatures.extend(ui_tx.signatures);
