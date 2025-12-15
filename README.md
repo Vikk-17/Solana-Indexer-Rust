@@ -3,7 +3,7 @@
 ---
 
 ## Architecture (MVP)
-[!Solana Indexer MVP](./assets/Indexer (MVP).png)
+![Solana Indexer MVP](./assets/Indexer (MVP).png)
 
 ---
 
