@@ -5,3 +5,6 @@ target
 **/mutants.out*/
 /target
 .env
+
+# For testing, was generating txt file with solana network data
+*.txt
