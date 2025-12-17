@@ -1,11 +1,10 @@
-mod model;
-
+use indexer::db::model;
 use model::TransactionsIndex;
 use solana_client::nonblocking::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcBlockConfig;
 use solana_commitment_config::CommitmentConfig;
 use solana_transaction_status_client_types::{
-    EncodedTransaction, TransactionDetails, UiMessage, UiTransactionEncoding
+    EncodedTransaction, TransactionDetails, UiMessage, UiTransactionEncoding,
 };
 
 #[tokio::main]
@@ -47,16 +46,16 @@ async fn main() -> anyhow::Result<()> {
             // }
 
             // Fetch fees
-            if let Some(meta) = &txn.meta {
-                // all_fees.push(meta.fee);
-                // all_logs.extend(meta.log_messages.clone());
-                if let Some(logs) = &meta.log_messages {
-                    for log in logs.iter {
-                        all_logs.extend(log.clone());
-                    }
-                }
-            }
-
+            // Fix the logs part by Deserializing the OptionSerializer<Vec<String>>
+            // if let Some(meta) = &txn.meta {
+            // all_fees.push(meta.fee);
+            // all_logs.extend(meta.log_messages.clone());
+            // if let Some(logs) = &meta.log_messages {
+            //     for log in logs.iter {
+            //         all_logs.extend(log.clone());
+            //     }
+            // }
+            // }
         }
     }
     // let txn_ix = TransactionsIndex{

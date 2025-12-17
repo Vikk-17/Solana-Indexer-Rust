@@ -13,18 +13,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "Solana-Indexer-Rust"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "solana-client",
- "solana-commitment-config",
- "solana-sdk",
- "solana-transaction-status-client-types",
- "tokio",
-]
-
-[[package]]
 name = "adler2"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1452,6 +1440,18 @@ checksum = "3acae9609540aa318d1bc588455225fb2085b9ed0c4f6bd0d9d5bcd86f1a0344"
 dependencies = [
  "icu_normalizer",
  "icu_properties",
+]
+
+[[package]]
+name = "indexer"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "solana-client",
+ "solana-commitment-config",
+ "solana-sdk",
+ "solana-transaction-status-client-types",
+ "tokio",
 ]
 
 [[package]]
