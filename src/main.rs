@@ -26,20 +26,16 @@ async fn main() -> anyhow::Result<()> {
         max_supported_transaction_version: Some(0),
     };
 
-    let block = client
-        .get_block_with_config(slot_number, config)
-        .await?;
-
+    let block = client.get_block_with_config(slot_number, config).await?;
     let mut all_signatures: Vec<String> = Vec::new();
-    // Iterate and add all signatures to the vector
-    for txn in block.transactions.unwrap_or_default() {
-        if let EncodedTransaction::Json(ui_tx) = txn.transaction {
-            all_signatures.extend(ui_tx.signatures);
+
+    if let Some(transactions) = &block.transactions {
+        for txn in transactions.iter() {
+            if let EncodedTransaction::Json(in_txn) = &txn.transaction {
+                all_signatures.extend(in_txn.signatures.clone());
+            }
         }
     }
-    // println!("Found {} signatures", all_signatures.len());
-    // for (i, sig) in all_signatures.iter().enumerate() {
-    //     println!("{}: {}", i + 1, sig);
-    // }
+
     Ok(())
 }
