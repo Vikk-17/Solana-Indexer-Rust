@@ -1,10 +1,9 @@
-use indexer::db::model;
-use model::TransactionsIndex;
+use indexer::db::model::TransactionsIndex;
 use solana_client::nonblocking::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcBlockConfig;
 use solana_commitment_config::CommitmentConfig;
 use solana_transaction_status_client_types::{
-    EncodedTransaction, TransactionDetails, UiMessage, UiTransactionEncoding,
+    EncodedTransaction, TransactionDetails, UiMessage, UiTransactionEncoding
 };
 
 #[tokio::main]
@@ -29,45 +28,46 @@ async fn main() -> anyhow::Result<()> {
     };
     let block = client.get_block_with_config(slot_number, config).await?;
 
-    // Vector to store all the signatures, fees
-    // let mut all_signatures: Vec<String> = Vec::new();
-    // let mut all_fees: Vec<u64> = Vec::new();
-    let mut all_acc_keys: Vec<String> = Vec::new();
-    let mut all_logs: Vec<String> = Vec::new();
     if let Some(transactions) = &block.transactions {
         for txn in transactions.iter() {
+            // Decalare the vars in each iteration
+            let mut all_signatures: Vec<String> = Vec::new();
+            let mut all_fees: Vec<u64> = Vec::new();
+            let mut all_acc_keys: Vec<String> = Vec::new();
+            let mut all_logs: Vec<String> = Vec::new();
+            let mut status: String = String::new();
+
             // Fetch all signatures
-            // if let EncodedTransaction::Json(inner_txn) = &txn.transaction {
-            //     // all_signatures.extend(inner_txn.signatures.clone());
-            //     // println!("{:#?}", inner_txn.message);
-            //     if let UiMessage::Raw(msg) = &inner_txn.message {
-            //         all_acc_keys.extend(msg.account_keys.clone());
-            //     }
-            // }
+            if let EncodedTransaction::Json(inner_txn) = &txn.transaction {
+                all_signatures.extend(inner_txn.signatures.clone());
+                if let UiMessage::Raw(msg) = &inner_txn.message {
+                    all_acc_keys.extend(msg.account_keys.clone());
+                }
+            }
 
             // Fetch fees
-            // Fix the logs part by Deserializing the OptionSerializer<Vec<String>>
-            // if let Some(meta) = &txn.meta {
-            // all_fees.push(meta.fee);
-            // all_logs.extend(meta.log_messages.clone());
-            // if let Some(logs) = &meta.log_messages {
-            //     for log in logs.iter {
-            //         all_logs.extend(log.clone());
-            //     }
-            // }
-            // }
+            if let Some(meta) = &txn.meta {
+                all_fees.push(meta.fee);
+                all_logs.extend(meta.log_messages.clone().unwrap());
+                // fetch the status and map to Ok if success
+                if let Ok(()) = &meta.status {
+                    status = String::from("Ok");
+                }
+            }
+
+            // Populate the struct to store into
+            let txn_set = TransactionsIndex {
+                signatures: all_signatures.clone(),
+                status,
+                fees: all_fees.clone(),
+                log_message: all_logs.clone(),
+                account_keys: all_acc_keys.clone(),
+            };
+
+            // push it to the db
+            println!("{:#?}", txn_set);
         }
     }
-    // let txn_ix = TransactionsIndex{
-    //     signatures: all_signatures,
-    //     fees: all_fees,
-    // };
-
-    // println!("{:#?}", txn_ix);
-
-    // for (i, logs) in all_logs.iter().enumerate() {
-    //     println!("{}: {}", i+1, logs);
-    // }
 
     Ok(())
 }
