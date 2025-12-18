@@ -32,7 +32,7 @@ async fn main() -> anyhow::Result<()> {
         for txn in transactions.iter() {
             // Decalare the vars in each iteration
             let mut all_signatures: Vec<String> = Vec::new();
-            let mut all_fees: Vec<u64> = Vec::new();
+            let mut all_fees: u64 = 0;
             let mut all_acc_keys: Vec<String> = Vec::new();
             let mut all_logs: Vec<String> = Vec::new();
             let mut status: String = String::new();
@@ -51,11 +51,13 @@ async fn main() -> anyhow::Result<()> {
 
             // Fetch fees
             if let Some(meta) = &txn.meta {
-                all_fees.push(meta.fee);
+                all_fees = meta.fee;
                 all_logs.extend(meta.log_messages.clone().unwrap());
                 // fetch the status and map to Ok if success
                 if let Ok(()) = &meta.status {
-                    status = String::from("Ok");
+                    status = String::from("Success");
+                } else {
+                    status = String::from("Failure");
                 }
             }
 
@@ -63,7 +65,7 @@ async fn main() -> anyhow::Result<()> {
             let txn_set = TransactionsIndex {
                 signatures: all_signatures.clone(),
                 status,
-                fees: all_fees.clone(),
+                fees: all_fees,
                 log_message: all_logs.clone(),
                 account_keys: all_acc_keys.clone(),
             };
