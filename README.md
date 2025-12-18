@@ -16,3 +16,4 @@
 - [Helius - Geyser Plugin](https://www.helius.dev/blog/solana-geyser-plugins-streaming-data-at-the-speed-of-light)
 - [Default Struct Rust](https://gist.github.com/ChrisWellsWood/84421854794037e760808d5d97d21421)
 - [Rust Doc - Default Struct](https://doc.rust-lang.org/std/default/trait.Default.html)
+- [Check this out to fetch data in more simple way - Solana Exhange](https://solana.stackexchange.com/questions/4337/working-with-the-optionserializer)
