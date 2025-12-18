@@ -7,8 +7,8 @@ pub struct TransactionsIndex {
     pub account_keys: Vec<String>,
 }
 
-// #[derive(Debug)]
-// pub struct InstructionsIndex {
-//     pub program_id_index: u8,
-//     pub accounts: Vec<u8>,
-// }
+#[derive(Debug)]
+pub struct InstructionsIndex {
+    pub program_id_index: u8,
+    pub accounts: Vec<u8>,
+}
