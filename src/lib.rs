@@ -1,1 +1,1 @@
-pub mod db;
+mod rpc_client;
